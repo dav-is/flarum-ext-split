@@ -11,7 +11,7 @@ composer require davis/flarum-ext-split
 
 ## Links
 
-- by [Davis](https://github.com/dav-is)
+- by [Davis](https://github.com/dav-is) & [Flagrow](https://github.com/flagrow)
 - [changelog](changelog.md)
 - [license](license.md)
 
