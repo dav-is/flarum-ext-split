@@ -2,7 +2,7 @@ var gulp = require('flarum-gulp');
 
 gulp({
     modules: {
-        'flagrow/split': [
+        'davis/split': [
             'src/**/*.js'
         ]
     }

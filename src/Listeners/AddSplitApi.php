@@ -1,18 +1,6 @@
-<?php
-/*
-* This file is part of flagrow/flarum-ext-split.
-*
-* Copyright (c) Flagrow.
-*
-* http://flagrow.github.io
-*
-* For the full copyright and license information, please view the license.md
-* file that was distributed with this source code.
-*/
+<?php namespace Davis\Split\Listeners;
 
-namespace Flagrow\Split\Listeners;
-
-use Flagrow\Split\Api\Controllers\SplitController;
+use Davis\Split\Api\Controllers\SplitController;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Event\ConfigureApiRoutes;
 use Flarum\Event\PrepareApiAttributes;
@@ -59,6 +47,6 @@ class AddSplitApi
      */
     public function configureApiRoutes(ConfigureApiRoutes $event)
     {
-        $event->post('/split', 'flagrow.split.run', SplitController::class);
+        $event->post('/split', 'davis.split.run', SplitController::class);
     }
 }

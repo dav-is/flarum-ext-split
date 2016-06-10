@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Flagrow\Split\Validators;
+namespace Davis\Split\Validators;
 
 use Flarum\Core\Validator\AbstractValidator;
 
@@ -26,7 +26,7 @@ class SplitDiscussionValidator extends AbstractValidator
                 'required',
                 'int'
             ],
-            'end_post_id' => [
+            'end_post_number' => [
                 'required',
                 'int'
             ],

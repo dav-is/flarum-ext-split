@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Split\Events;
+namespace Davis\Split\Events;
 
 use Flarum\Core\Discussion;
 use Flarum\Core\User;

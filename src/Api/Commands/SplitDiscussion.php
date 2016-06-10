@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Flagrow\Split\Api\Commands;
+namespace Davis\Split\Api\Commands;
 
 use Flarum\Core\User;
 
@@ -28,7 +28,7 @@ class SplitDiscussion
      *
      * @var int
      */
-    public $end_post_id;
+    public $end_post_number;
 
     /**
      * The title of the new discussion.
@@ -52,11 +52,11 @@ class SplitDiscussion
      * @param int    $end_post_id
      * @param User   $actor
      */
-    public function __construct($title, $start_post_id, $end_post_id, User $actor)
+    public function __construct($title, $start_post_id, $end_post_number, User $actor)
     {
         $this->title         = $title;
         $this->start_post_id = $start_post_id;
-        $this->end_post_id   = $end_post_id;
+        $this->end_post_number   = $end_post_number;
         $this->actor         = $actor;
     }
 }

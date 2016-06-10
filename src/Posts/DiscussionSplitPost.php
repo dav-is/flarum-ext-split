@@ -9,7 +9,7 @@
  * For the full copyright and license information, please view the license.md
  * file that was distributed with this source code.
  */
-namespace Flagrow\Split\Posts;
+namespace Davis\Split\Posts;
 
 use Flarum\Core\Post;
 use Flarum\Core\Post\AbstractEventPost;

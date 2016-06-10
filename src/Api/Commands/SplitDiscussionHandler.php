@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Flagrow\Split\Api\Commands;
+namespace Davis\Split\Api\Commands;
 
-use Flagrow\Split\Events\DiscussionWasSplit;
-use Flagrow\Split\Validators\SplitDiscussionValidator;
+use Davis\Split\Events\DiscussionWasSplit;
+use Davis\Split\Validators\SplitDiscussionValidator;
 use Flarum\Core\Access\AssertPermissionTrait;
 use Flarum\Core\Discussion;
 use Flarum\Core\Repository\PostRepository;
@@ -66,7 +66,7 @@ class SplitDiscussionHandler
 
         $this->validator->assertValid([
             'start_post_id' => $command->start_post_id,
-            'end_post_id'   => $command->end_post_id,
+            'end_post_number'   => $command->end_post_number,
             'title'         => $command->title
         ]);
 
@@ -89,7 +89,7 @@ class SplitDiscussionHandler
         $discussion->save();
 
         // update all posts that are split.
-        $affectedPosts = $this->assignPostsToDiscussion($originalDiscussion, $discussion, $startPost->id, $command->end_post_id);
+        $affectedPosts = $this->assignPostsToDiscussion($originalDiscussion, $discussion, $startPost->number, $command->end_post_number);
 
         $originalDiscussion = $this->refreshDiscussion($originalDiscussion);
         $discussion = $this->refreshDiscussion($discussion);
@@ -107,16 +107,22 @@ class SplitDiscussionHandler
      * @param Discussion $originalDiscussion
      * @param Discussion $discussion
      * @param            $start_post_id
-     * @param            $end_post_id
+     * @param            $end_post_number
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    protected function assignPostsToDiscussion(Discussion $originalDiscussion, Discussion $discussion, $start_post_id, $end_post_id)
+    protected function assignPostsToDiscussion(Discussion $originalDiscussion, Discussion $discussion, $start_post_number, $end_post_number)
     {
         $this->posts
             ->query()
             ->where('discussion_id', $originalDiscussion->id)
-            ->whereBetween('id', [$start_post_id, $end_post_id])
+            ->whereBetween('number', [$start_post_number, $end_post_number])
             ->update(['discussion_id' => $discussion->id]);
+            
+        $this->posts
+            ->query()
+            ->where('discussion_id', $discussion->id)
+            ->orderBy('time', 'ASC')
+            ->decrement('number', $start_post_number - 1);
 
         // Update relationship posts on new discussion.
         $discussion->load('posts');

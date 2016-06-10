@@ -1,19 +1,8 @@
-<?php
-/*
- * This file is part of flagrow/flarum-ext-split.
- *
- * Copyright (c) Flagrow.
- *
- * http://flagrow.github.io
- *
- * For the full copyright and license information, please view the license.md
- * file that was distributed with this source code.
- */
-namespace Flagrow\Split\Api\Controllers;
+<?php namespace Davis\Split\Api\Controllers;
 
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Illuminate\Support\Arr;
-use Flagrow\Split\Api\Commands\SplitDiscussion;
+use Davis\Split\Api\Commands\SplitDiscussion;
 use Flarum\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
@@ -49,11 +38,11 @@ class SplitController extends AbstractResourceController
     {
         $title = Arr::get($request->getParsedBody(), 'title');
         $start_post_id = Arr::get($request->getParsedBody(), 'start_post_id');
-        $end_post_id = Arr::get($request->getParsedBody(), 'end_post_id');
+        $end_post_number = Arr::get($request->getParsedBody(), 'end_post_number');
         $actor = $request->getAttribute('actor');
 
         return $this->bus->dispatch(
-            new SplitDiscussion($title, $start_post_id, $end_post_id, $actor)
+            new SplitDiscussion($title, $start_post_id, $end_post_number, $actor)
         );
     }
 }

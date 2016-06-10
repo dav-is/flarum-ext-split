@@ -2,13 +2,13 @@ import { extend } from 'flarum/extend';
 import Model from 'flarum/Model';
 import Discussion from 'flarum/models/Discussion';
 
-import addSplitControl from 'flagrow/split/addSplitControl';
+import addSplitControl from 'davis/split/addSplitControl';
 
-import SplitController from 'flagrow/split/components/SplitController';
+import SplitController from 'davis/split/components/SplitController';
 
 //import extendDiscussionPage from 'flagrow/split/extendDiscussionPage';
 
-app.initializers.add('flagrow-split', app => {
+app.initializers.add('davis-split', app => {
 
     app.store.models.discussions.prototype.canSplit = Model.attribute('canSplit');
 

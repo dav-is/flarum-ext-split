@@ -5,8 +5,8 @@ import Button from 'flarum/components/Button';
 import CommentPost from 'flarum/components/CommentPost';
 import DiscussionPage from 'flarum/components/DiscussionPage';
 
-import SplitPostModal from 'flagrow/split/components/SplitPostModal';
-import SplitController from 'flagrow/split/components/SplitController';
+import SplitPostModal from 'davis/split/components/SplitPostModal';
+import SplitController from 'davis/split/components/SplitController';
 
 export default function(splitController) {
 
@@ -23,7 +23,7 @@ export default function(splitController) {
                 // there is a discussion property on this object though
                 // luceos on feb 7 2016
                 onclick: () => {
-                    splitController.start(post.data.attributes.number, discussion.data.id);
+                    splitController.start(post.data.attributes.id, post.data.attributes.number, discussion.data.id);
                     splitController.log();
                 }
             }, app.translator.trans('flagrow-split.forum.post_controls.split_button'))

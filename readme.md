@@ -1,18 +1,18 @@
-# flagrow/flarum-ext-split
+# davis/flarum-ext-split
 
-[![Latest Stable Version](https://poser.pugx.org/flagrow/flarum-ext-split/v/stable)][packagist-link] [![License](https://poser.pugx.org/flagrow/flarum-ext-split/license)][packagist-link] [![Gitter](https://badges.gitter.im/flagrow/flarum-ext-split.svg)](https://gitter.im/flagrow/chat)
+[![Latest Stable Version](https://poser.pugx.org/davis/flarum-ext-split/v/stable)][packagist-link] [![License](https://poser.pugx.org/davis/flarum-ext-split/license)][packagist-link]
 
 
 ## Install
 
 ```bash
-composer require flagrow/flarum-ext-split
+composer require davis/flarum-ext-split
 ```
 
 ## Links
 
-- by [Flagrow](https://github.com/flagrow)
+- by [Davis](https://github.com/dav-is)
 - [changelog](changelog.md)
 - [license](license.md)
 
-[packagist-link]: https://packagist.org/packages/flagrow/flarum-ext-split
+[packagist-link]: https://packagist.org/packages/davis/flarum-ext-split

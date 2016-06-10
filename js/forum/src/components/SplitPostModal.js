@@ -2,7 +2,7 @@ import Modal from 'flarum/components/Modal';
 import Button from 'flarum/components/Button';
 import Discussion from 'flarum/models/Discussion';
 
-import SplitController from 'flagrow/split/components/SplitController';
+import SplitController from 'davis/split/components/SplitController';
 
 export default class SplitPostModal extends Modal {
     init() {
@@ -81,7 +81,7 @@ export default class SplitPostModal extends Modal {
 
         data.append('title', this.newDiscussionTitle());
         data.append('start_post_id', this.splitController.startPost());
-        data.append('end_post_id', this.splitController.endPost());
+        data.append('end_post_number', this.splitController.endPost());
 
         app.request({
             method: 'POST',
@@ -90,10 +90,16 @@ export default class SplitPostModal extends Modal {
             data
         }).then(
             discussion => {
-                app.cache.discussionList.addDiscussion(discussion);
+                discussion.data.id = m.prop(discussion.data.id);
+                discussion.data.attributes.slug = m.prop(discussion.data.attributes.slug);
+                discussion.data.attributes.startUser = m.prop(discussion.data.attributes.startUser);
+                discussion.data.attributes.isUnread = m.prop(discussion.data.attributes.isUnread);
+                console.log(discussion.data);
+                app.cache.discussionList.addDiscussion(discussion.data);
                 this.success = true;
-                //this.hide();
-                m.route(app.route.discussion(new discussion));
+                this.hide();
+                console.log(app.route.discussion(discussion.data));
+                m.route(app.route.discussion(discussion.data));
             },
             this.loaded.bind(this)
         );

@@ -1,6 +1,8 @@
 'use strict';
 
-System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app', 'flarum/utils/PostControls', 'flarum/components/Button', 'flarum/components/CommentPost', 'flarum/components/DiscussionPage', 'flagrow/split/components/SplitPostModal', 'flagrow/split/components/SplitController'], function (_export, _context) {
+System.register('davis/split/addSplitControl', ['flarum/extend', 'flarum/app', 'flarum/utils/PostControls', 'flarum/components/Button', 'flarum/components/CommentPost', 'flarum/components/DiscussionPage', 'davis/split/components/SplitPostModal', 'davis/split/components/SplitController'], function (_export, _context) {
+    "use strict";
+
     var extend, app, PostControls, Button, CommentPost, DiscussionPage, SplitPostModal, SplitController;
 
     _export('default', function (splitController) {
@@ -17,7 +19,7 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                 // there is a discussion property on this object though
                 // luceos on feb 7 2016
                 onclick: function onclick() {
-                    splitController.start(post.data.attributes.number, discussion.data.id);
+                    splitController.start(post.data.attributes.id, post.data.attributes.number, discussion.data.id);
                     splitController.log();
                 }
             }, app.translator.trans('flagrow-split.forum.post_controls.split_button'))]);
@@ -59,17 +61,19 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
             CommentPost = _flarumComponentsCommentPost.default;
         }, function (_flarumComponentsDiscussionPage) {
             DiscussionPage = _flarumComponentsDiscussionPage.default;
-        }, function (_flagrowSplitComponentsSplitPostModal) {
-            SplitPostModal = _flagrowSplitComponentsSplitPostModal.default;
-        }, function (_flagrowSplitComponentsSplitController) {
-            SplitController = _flagrowSplitComponentsSplitController.default;
+        }, function (_davisSplitComponentsSplitPostModal) {
+            SplitPostModal = _davisSplitComponentsSplitPostModal.default;
+        }, function (_davisSplitComponentsSplitController) {
+            SplitController = _davisSplitComponentsSplitController.default;
         }],
         execute: function () {}
     };
 });;
 'use strict';
 
-System.register('flagrow/split/components/SplitController', [], function (_export, _context) {
+System.register('davis/split/components/SplitController', [], function (_export, _context) {
+    "use strict";
+
     var SplitController;
     return {
         setters: [],
@@ -83,7 +87,7 @@ System.register('flagrow/split/components/SplitController', [], function (_expor
 
                 babelHelpers.createClass(SplitController, [{
                     key: 'start',
-                    value: function start(postId, discussionId) {
+                    value: function start(postId, postNumber, discussionId) {
                         // should not be necessary
                         if (postId == 1) return;
 
@@ -93,7 +97,7 @@ System.register('flagrow/split/components/SplitController', [], function (_expor
 
                         $('.PostStream-item').each(function () {
                             var postIndex = $(this).attr('data-number');
-                            if (postIndex > postId) {
+                            if (postIndex > postNumber) {
                                 $('.flagrow-split-endSplitButton', $(this)).show();
                             }
                         });
@@ -101,8 +105,8 @@ System.register('flagrow/split/components/SplitController', [], function (_expor
                     }
                 }, {
                     key: 'end',
-                    value: function end(postId) {
-                        this._endPost = postId;
+                    value: function end(postNumber) {
+                        this._endPost = postNumber;
                     }
                 }, {
                     key: 'startPost',
@@ -139,7 +143,9 @@ System.register('flagrow/split/components/SplitController', [], function (_expor
 });;
 'use strict';
 
-System.register('flagrow/split/components/SplitPostModal', ['flarum/components/Modal', 'flarum/components/Button', 'flarum/models/Discussion', 'flagrow/split/components/SplitController'], function (_export, _context) {
+System.register('davis/split/components/SplitPostModal', ['flarum/components/Modal', 'flarum/components/Button', 'flarum/models/Discussion', 'davis/split/components/SplitController'], function (_export, _context) {
+    "use strict";
+
     var Modal, Button, Discussion, SplitController, SplitPostModal;
     return {
         setters: [function (_flarumComponentsModal) {
@@ -148,8 +154,8 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
             Button = _flarumComponentsButton.default;
         }, function (_flarumModelsDiscussion) {
             Discussion = _flarumModelsDiscussion.default;
-        }, function (_flagrowSplitComponentsSplitController) {
-            SplitController = _flagrowSplitComponentsSplitController.default;
+        }, function (_davisSplitComponentsSplitController) {
+            SplitController = _davisSplitComponentsSplitController.default;
         }],
         execute: function () {
             SplitPostModal = function (_Modal) {
@@ -222,7 +228,7 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
 
                         data.append('title', this.newDiscussionTitle());
                         data.append('start_post_id', this.splitController.startPost());
-                        data.append('end_post_id', this.splitController.endPost());
+                        data.append('end_post_number', this.splitController.endPost());
 
                         app.request({
                             method: 'POST',
@@ -232,10 +238,16 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
                             },
                             data: data
                         }).then(function (discussion) {
-                            app.cache.discussionList.addDiscussion(discussion);
+                            discussion.data.id = m.prop(discussion.data.id);
+                            discussion.data.attributes.slug = m.prop(discussion.data.attributes.slug);
+                            discussion.data.attributes.startUser = m.prop(discussion.data.attributes.startUser);
+                            discussion.data.attributes.isUnread = m.prop(discussion.data.attributes.isUnread);
+                            console.log(discussion.data);
+                            app.cache.discussionList.addDiscussion(discussion.data);
                             _this2.success = true;
-                            //this.hide();
-                            m.route(app.route.discussion(new discussion()));
+                            _this2.hide();
+                            console.log(app.route.discussion(discussion.data));
+                            m.route(app.route.discussion(discussion.data));
                         }, this.loaded.bind(this));
                     }
                 }]);
@@ -248,7 +260,9 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
 });;
 'use strict';
 
-System.register('flagrow/split/extendDiscussionPage', ['flarum/extend', 'flarum/components/DiscussionPage'], function (_export, _context) {
+System.register('davis/split/extendDiscussionPage', ['flarum/extend', 'flarum/components/DiscussionPage'], function (_export, _context) {
+    "use strict";
+
     var extend, DiscussionPage;
 
     _export('default', function () {
@@ -268,7 +282,9 @@ System.register('flagrow/split/extendDiscussionPage', ['flarum/extend', 'flarum/
 });;
 'use strict';
 
-System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flarum/models/Discussion', 'flagrow/split/addSplitControl', 'flagrow/split/components/SplitController'], function (_export, _context) {
+System.register('davis/split/main', ['flarum/extend', 'flarum/Model', 'flarum/models/Discussion', 'davis/split/addSplitControl', 'davis/split/components/SplitController'], function (_export, _context) {
+    "use strict";
+
     var extend, Model, Discussion, addSplitControl, SplitController;
     return {
         setters: [function (_flarumExtend) {
@@ -277,16 +293,16 @@ System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flarum/
             Model = _flarumModel.default;
         }, function (_flarumModelsDiscussion) {
             Discussion = _flarumModelsDiscussion.default;
-        }, function (_flagrowSplitAddSplitControl) {
-            addSplitControl = _flagrowSplitAddSplitControl.default;
-        }, function (_flagrowSplitComponentsSplitController) {
-            SplitController = _flagrowSplitComponentsSplitController.default;
+        }, function (_davisSplitAddSplitControl) {
+            addSplitControl = _davisSplitAddSplitControl.default;
+        }, function (_davisSplitComponentsSplitController) {
+            SplitController = _davisSplitComponentsSplitController.default;
         }],
         execute: function () {
 
             //import extendDiscussionPage from 'flagrow/split/extendDiscussionPage';
 
-            app.initializers.add('flagrow-split', function (app) {
+            app.initializers.add('davis-split', function (app) {
 
                 app.store.models.discussions.prototype.canSplit = Model.attribute('canSplit');
 

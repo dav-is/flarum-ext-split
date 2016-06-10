@@ -1,7 +1,7 @@
 {
-    "name": "flagrow/flarum-ext-split",
+    "name": "davis/flarum-ext-split",
     "description": "Split a forum discussion into single discussions.",
-    "keywords": ["split", "flarum", "flagrow"],
+    "keywords": ["split", "flarum", "davis"],
     "type": "flarum-extension",
     "license": "MIT",
     "authors": [
@@ -13,14 +13,18 @@
             "name": "Daniël Klabbers",
             "email": "daniel+flarum@klabbers.email",
             "homepage": "http://hyn.io"
+        },
+        {
+            "name": "Connor Davis",
+            "email": "davis@produes.co"
         }
     ],
     "support": {
-        "issues": "https://github.com/flagrow/flarum-ext-split/issues",
-        "source": "https://github.com/flagrow/flarum-ext-split"
+        "issues": "https://github.com/davis/flarum-ext-split/issues",
+        "source": "https://github.com/davis/flarum-ext-split"
     },
     "require": {
-        "flarum/core": "^0.1.0-beta.4"
+        "flarum/core": "^0.1.0-beta.5"
     },
     "extra": {
         "flarum-extension": {
@@ -37,7 +41,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Flagrow\\Split\\": "src/"
+            "Davis\\Split\\": "src/"
         }
     }
 }
