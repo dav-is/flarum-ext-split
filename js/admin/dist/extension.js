@@ -1,6 +1,8 @@
 'use strict';
 
-System.register('flagrow/split/main', ['flarum/extend', 'flarum/app', 'flarum/components/PermissionGrid'], function (_export, _context) {
+System.register('davis/split/main', ['flarum/extend', 'flarum/app', 'flarum/components/PermissionGrid'], function (_export, _context) {
+  "use strict";
+
   var extend, app, PermissionGrid;
   return {
     setters: [function (_flarumExtend) {
@@ -12,15 +14,15 @@ System.register('flagrow/split/main', ['flarum/extend', 'flarum/app', 'flarum/co
     }],
     execute: function () {
 
-      //import addImageUploadPane from 'flagrow/image-upload/addImageUploadPane'
+      //import addImageUploadPane from 'davis/image-upload/addImageUploadPane'
 
-      app.initializers.add('flagrow-split', function (app) {
+      app.initializers.add('davis-split', function (app) {
         //addSplitPane();
 
         extend(PermissionGrid.prototype, 'moderateItems', function (items) {
           items.add('splitDiscussion', {
             icon: 'code-fork',
-            label: app.translator.trans('flagrow-split.admin.permissions.split_discussion_label'),
+            label: app.translator.trans('davis-split.admin.permissions.split_discussion_label'),
             permission: 'discussion.split'
           }, 65);
         });

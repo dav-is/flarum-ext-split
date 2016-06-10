@@ -1,6 +1,13 @@
 davis-split:
     forum:
+        modal:
+            title: Split Discussion
+            new_discussion_label: Title of the New Discussion
+            submit_button: Split
         post_controls:
             split_button: Split from here
         post_footer:
             split_button: Split to here
+    admin:
+        permissions:
+            split_discussion_label: Split Discussions

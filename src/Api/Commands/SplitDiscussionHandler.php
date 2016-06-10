@@ -62,7 +62,7 @@ class SplitDiscussionHandler
      */
     public function handle(SplitDiscussion $command)
     {
-        $this->assertCan($command->actor, 'split');
+        $this->assertCan($command->actor, 'discussion.split');
 
         $this->validator->assertValid([
             'start_post_id' => $command->start_post_id,
@@ -121,9 +121,12 @@ class SplitDiscussionHandler
         $this->posts
             ->query()
             ->where('discussion_id', $discussion->id)
-            ->orderBy('time', 'ASC')
+            ->orderBy('number', 'ASC')
             ->decrement('number', $start_post_number - 1);
 
+        $discussion->number_index = ($end_post_number - $start_post_number - 1);
+        $discussion->save();
+        
         // Update relationship posts on new discussion.
         $discussion->load('posts');
 

@@ -6,7 +6,7 @@ import addSplitControl from 'davis/split/addSplitControl';
 
 import SplitController from 'davis/split/components/SplitController';
 
-//import extendDiscussionPage from 'flagrow/split/extendDiscussionPage';
+//import extendDiscussionPage from 'davis/split/extendDiscussionPage';
 
 app.initializers.add('davis-split', app => {
 
@@ -15,7 +15,6 @@ app.initializers.add('davis-split', app => {
     //extendDiscussionPage();
 
     var splitController = new SplitController();
-    console.log(splitController);
 
     addSplitControl(splitController);
 });

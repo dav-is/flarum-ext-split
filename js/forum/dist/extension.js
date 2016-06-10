@@ -14,15 +14,11 @@ System.register('davis/split/addSplitControl', ['flarum/extend', 'flarum/app', '
 
             items.add('splitFrom', [m(Button, {
                 icon: 'code-fork',
-                className: 'flagrow-split-startSplitButton',
-                // i'm not sure whether setting this attribute on app.current is the correct way,
-                // there is a discussion property on this object though
-                // luceos on feb 7 2016
+                className: 'davis-split-startSplitButton',
                 onclick: function onclick() {
                     splitController.start(post.data.attributes.id, post.data.attributes.number, discussion.data.id);
-                    splitController.log();
                 }
-            }, app.translator.trans('flagrow-split.forum.post_controls.split_button'))]);
+            }, app.translator.trans('davis-split.forum.post_controls.split_button'))]);
         });
 
         extend(CommentPost.prototype, 'footerItems', function (items) {
@@ -33,18 +29,15 @@ System.register('davis/split/addSplitControl', ['flarum/extend', 'flarum/app', '
 
             items.add('splitTo', [m(Button, {
                 icon: 'code-fork',
-                className: 'flagrow-split-endSplitButton Button Button--link',
-                //onclick: () => {app.current.splitting = false},
-                // @todo the above is a temporary test solution, we need to implement the modal
+                className: 'davis-split-endSplitButton Button Button--link',
                 onclick: function onclick() {
                     splitController.end(post.data.attributes.number);
-                    splitController.log();
                     var splitModal = new SplitPostModal();
                     splitModal.setController(splitController);
                     app.modal.show(splitModal);
                 },
                 style: { display: 'none' }
-            }, app.translator.trans('flagrow-split.forum.post_footer.split_button'))]);
+            }, app.translator.trans('davis-split.forum.post_footer.split_button'))]);
         });
     });
 
@@ -98,10 +91,10 @@ System.register('davis/split/components/SplitController', [], function (_export,
                         $('.PostStream-item').each(function () {
                             var postIndex = $(this).attr('data-number');
                             if (postIndex > postNumber) {
-                                $('.flagrow-split-endSplitButton', $(this)).show();
+                                $('.davis-split-endSplitButton', $(this)).show();
                             }
                         });
-                        $('.flagrow-split-startSplitButton').hide();
+                        $('.davis-split-startSplitButton').hide();
                     }
                 }, {
                     key: 'end',
@@ -124,14 +117,6 @@ System.register('davis/split/components/SplitController', [], function (_export,
                         this._isSplitting = false;
                         this._startPost = null;
                         this._endPost = null;
-                    }
-                }, {
-                    key: 'log',
-                    value: function log() {
-                        console.log('splitting:' + this._isSplitting);
-                        console.log('discussion:' + this._discussion);
-                        console.log('startPost:' + this._startPost);
-                        console.log('endPost:' + this._endPost);
                     }
                 }]);
                 return SplitController;
@@ -171,18 +156,12 @@ System.register('davis/split/components/SplitPostModal', ['flarum/components/Mod
                     value: function init() {
                         babelHelpers.get(Object.getPrototypeOf(SplitPostModal.prototype), 'init', this).call(this);
 
-                        this.success = false;
-
-                        this.gotError = false;
-
                         this.newDiscussionTitle = m.prop('');
                     }
                 }, {
                     key: 'setController',
                     value: function setController(splitController) {
                         this.splitController = splitController;
-
-                        this.splitController.log();
                     }
                 }, {
                     key: 'className',
@@ -192,19 +171,13 @@ System.register('davis/split/components/SplitPostModal', ['flarum/components/Mod
                 }, {
                     key: 'title',
                     value: function title() {
-                        return app.translator.trans('flagrow-split.forum.modal.title');
+                        return app.translator.trans('davis-split.forum.modal.title');
                     }
                 }, {
                     key: 'content',
                     value: function content() {
-                        if (this.success && !this.gotError) {
-                            return [m('div', { className: 'Modal-body' }, [m('div', { className: 'Form Form--centered' }, [m('p', { className: 'helpText' }, app.translator.trans('flagrow-split.forum.modalconfirmation_message')), m('div', { className: 'Form-group' }, [m(Button, {
-                                className: 'Button Button--primary Button--block',
-                                onclick: this.hide.bind(this)
-                            }, app.translator.trans('flagrow-split.forum.modal.dismiss_button'))])])])];
-                        }
 
-                        return [m('div', { className: 'Modal-body' }, [m('div', { className: 'Form Form--centered' }, [m('div', { className: 'Form-group' }, [m('label', {}, app.translator.trans('flagrow-split.forum.modal.new_discussion_label')), m('input', {
+                        return [m('div', { className: 'Modal-body' }, [m('div', { className: 'Form Form--centered' }, [m('div', { className: 'Form-group' }, [m('label', {}, app.translator.trans('davis-split.forum.modal.new_discussion_label')), m('input', {
                             name: 'new_discussion_title',
                             value: this.newDiscussionTitle(),
                             oninput: m.withAttr('value', this.newDiscussionTitle)
@@ -213,7 +186,7 @@ System.register('davis/split/components/SplitPostModal', ['flarum/components/Mod
                             type: 'submit',
                             loading: this.loading,
                             disabled: !this.newDiscussionTitle()
-                        }, app.translator.trans('flagrow-split.forum.modal.submit_button'))])])])];
+                        }, app.translator.trans('davis-split.forum.modal.submit_button'))])])])];
                     }
                 }, {
                     key: 'onsubmit',
@@ -237,17 +210,14 @@ System.register('davis/split/components/SplitPostModal', ['flarum/components/Mod
                                 return raw;
                             },
                             data: data
-                        }).then(function (discussion) {
-                            discussion.data.id = m.prop(discussion.data.id);
-                            discussion.data.attributes.slug = m.prop(discussion.data.attributes.slug);
-                            discussion.data.attributes.startUser = m.prop(discussion.data.attributes.startUser);
-                            discussion.data.attributes.isUnread = m.prop(discussion.data.attributes.isUnread);
-                            console.log(discussion.data);
-                            app.cache.discussionList.addDiscussion(discussion.data);
-                            _this2.success = true;
+                        }).then(function (data) {
+                            var discussion = {};
+                            discussion.id = m.prop(data.data.id);
+                            discussion.slug = m.prop(data.data.attributes.slug);
+                            discussion.startUser = m.prop(data.data.attributes.startUser);
+                            discussion.isUnread = m.prop(data.data.attributes.isUnread);
                             _this2.hide();
-                            console.log(app.route.discussion(discussion.data));
-                            m.route(app.route.discussion(discussion.data));
+                            m.route(app.route.discussion(discussion));
                         }, this.loaded.bind(this));
                     }
                 }]);
@@ -300,7 +270,7 @@ System.register('davis/split/main', ['flarum/extend', 'flarum/Model', 'flarum/mo
         }],
         execute: function () {
 
-            //import extendDiscussionPage from 'flagrow/split/extendDiscussionPage';
+            //import extendDiscussionPage from 'davis/split/extendDiscussionPage';
 
             app.initializers.add('davis-split', function (app) {
 
@@ -309,7 +279,6 @@ System.register('davis/split/main', ['flarum/extend', 'flarum/Model', 'flarum/mo
                 //extendDiscussionPage();
 
                 var splitController = new SplitController();
-                console.log(splitController);
 
                 addSplitControl(splitController);
             });

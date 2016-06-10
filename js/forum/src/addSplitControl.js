@@ -18,15 +18,11 @@ export default function(splitController) {
         items.add('splitFrom', [
             m(Button, {
                 icon: 'code-fork',
-                className: 'flagrow-split-startSplitButton',
-                // i'm not sure whether setting this attribute on app.current is the correct way,
-                // there is a discussion property on this object though
-                // luceos on feb 7 2016
+                className: 'davis-split-startSplitButton',
                 onclick: () => {
                     splitController.start(post.data.attributes.id, post.data.attributes.number, discussion.data.id);
-                    splitController.log();
                 }
-            }, app.translator.trans('flagrow-split.forum.post_controls.split_button'))
+            }, app.translator.trans('davis-split.forum.post_controls.split_button'))
         ]);
     });
 
@@ -39,18 +35,15 @@ export default function(splitController) {
         items.add('splitTo', [
             m(Button, {
                 icon: 'code-fork',
-                className: 'flagrow-split-endSplitButton Button Button--link',
-                //onclick: () => {app.current.splitting = false},
-                // @todo the above is a temporary test solution, we need to implement the modal
+                className: 'davis-split-endSplitButton Button Button--link',
                 onclick: () => {
                     splitController.end(post.data.attributes.number);
-                    splitController.log();
                     var splitModal = new SplitPostModal();
                     splitModal.setController(splitController);
                     app.modal.show(splitModal);
                 },
                 style: {display: 'none'}
-            }, app.translator.trans('flagrow-split.forum.post_footer.split_button'))
+            }, app.translator.trans('davis-split.forum.post_footer.split_button'))
         ]);
     });
 }
