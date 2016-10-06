@@ -13,7 +13,7 @@ export default class SplitController {
 
         $('.PostStream-item').each(function () {
             var postIndex = $(this).attr('data-number');
-            if (postIndex > postNumber) {
+            if (postIndex >= postNumber) {
                 $('.davis-split-endSplitButton', $(this)).show();
             }
         });
