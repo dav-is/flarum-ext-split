@@ -90,7 +90,7 @@ System.register('davis/split/components/SplitController', [], function (_export,
 
                         $('.PostStream-item').each(function () {
                             var postIndex = $(this).attr('data-number');
-                            if (postIndex > postNumber) {
+                            if (postIndex >= postNumber) {
                                 $('.davis-split-endSplitButton', $(this)).show();
                             }
                         });
