@@ -1,0 +1,13 @@
+davis-split:
+    forum:
+        modal:
+            title: Diviser la discussion
+            new_discussion_label: Titre de la nouvelle discussion
+            submit_button: Extraire les messages
+        post_controls:
+            split_button: Diviser depuis ce message
+        post_footer:
+            split_button: Extraire jusqu'à ce message 
+    admin:
+        permissions:
+            split_discussion_label: Diviser les discussions
