@@ -106,7 +106,7 @@ class SplitDiscussionHandler
      *
      * @param Discussion $originalDiscussion
      * @param Discussion $discussion
-     * @param            $start_post_id
+     * @param            $start_post_number
      * @param            $end_post_number
      * @return \Illuminate\Database\Eloquent\Collection
      */
@@ -117,14 +117,14 @@ class SplitDiscussionHandler
             ->where('discussion_id', $originalDiscussion->id)
             ->whereBetween('number', [$start_post_number, $end_post_number])
             ->update(['discussion_id' => $discussion->id]);
-            
+
         $this->posts
             ->query()
             ->where('discussion_id', $discussion->id)
             ->orderBy('number', 'ASC')
             ->decrement('number', $start_post_number - 1);
 
-        $discussion->number_index = ($end_post_number - $start_post_number - 1);
+        $discussion->number_index = $end_post_number - ($start_post_number - 1);
         $discussion->save();
         
         // Update relationship posts on new discussion.
